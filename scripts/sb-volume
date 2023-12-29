@@ -1,9 +1,11 @@
 #!/usr/bin/env sh
 
 # Prints the current volume or 🔇 if muted.
+TERMINAL='st';
+icon=""
 
 case $BLOCK_BUTTON in
-	1) setsid -w -f "$TERMINAL" -e pulsemixer; pkill -RTMIN+10 "${STATUSBAR:-dwmblocks}" ;;
+	1) "$TERMINAL" -e pavucontrol; pkill -RTMIN+3 "${STATUSBAR:-dwmblocks}" ;;
 	2) wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle ;;
 	4) wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+ ;;
 	5) wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%- ;;
@@ -33,7 +35,7 @@ case 1 in
 	$((vol >= 70)) ) icon=" " ;;
 	$((vol >= 30)) ) icon=" " ;;
 	$((vol >= 1)) ) icon=" " ;;
-	* ) echo  && exit ;;
+	* ) echo "婢" && exit ;;
 esac
 
-echo "$icon$vol%"
+printf "%s%s" "$icon" "$vol%"
