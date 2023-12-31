@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+
+MONITOR=$(xrandr | grep 'primary' | awk '{print $1}')
+STATE=$(xrandr --verbose --current | grep ^"$MONITOR" -A5 | tail -n1 | awk '{print $2}')
+TERMINAL='st'
+
+function inc_brightness() {
+	xrandr --output "$MONITOR" --brightness $(awk '{printf "%.2f", $1 + 0.05}' <<< $(xrandr --verbose | grep -m 1 -i brightness | cut -f2 -d ' '));
+	sleep 0.5
+	notify-send "🔆 Increased by 5%" "Brightness: $STATE";
+}
+
+function dec_brightness() {
+	xrandr --output "$MONITOR" --brightness $(awk '{printf "%.2f", $1 - 0.05}' <<< $(xrandr --verbose | grep -m 1 -i brightness | cut -f2 -d ' '));
+	sleep 0.5
+	notify-send "🔆 Decreased by 5%" "Brightness: $STATE";
+}
+
+case $BLOCK_BUTTON in
+	1) notify-send "🔆 Brightness: $STATE" "
+Left   Click: Shows brightness level
+Middle Click:   Increases brightness by 5%
+Right  Click:  Decreases brightness by 5%" ;;
+	2) inc_brightness; pkill -RTMIN+6 dwmblocks ;;
+	3) dec_brightness; pkill -RTMIN+6 dwmblocks ;;
+	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+printf "%s %.2f%% " "🔆" "$STATE";

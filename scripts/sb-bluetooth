@@ -1,12 +1,14 @@
 #!/usr/bin/env sh
 
-icon=""
+icon=""
 status=`bluetoothctl show | grep 'Powered:' | awk '{print $2}'`
 state=""
 if [[ "$status" == "yes" ]]; then
 	state="on"
+	icon=""
 else
 	state="off"
+	icon=""
 fi
 
 TERMINAL='st';
@@ -15,10 +17,12 @@ function on_off() {
 	if [[ "$state" == "on" ]]; then
 		bluetoothctl power off &>/dev/null;
 		bluetoothctl pairable off &>/dev/null;
+		icon=""
 		state="off";
 	else
 		bluetoothctl power on &>/dev/null;
 		bluetoothctl pairable on &>/dev/null;
+		icon=""
 		state="on";
 	fi
 }

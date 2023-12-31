@@ -11,8 +11,6 @@ case $BLOCK_BUTTON in
 ⚡: charged
 ❗: battery very low!
 - Scroll to change adjust xbacklight." ;;
-	4) xbacklight -inc 10 ;;
-	5) xbacklight -dec 10 ;;
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
@@ -31,18 +29,18 @@ for battery in /sys/class/power_supply/BAT?*; do
 	esac
 	capacity="$(cat "$battery/capacity" 2>&1)"
 	# Will make a warn variable if discharging and low
-	[ "$status" = "" ] && [ "$capacity" -le 25 ] && warn="❗"
+	[ "$status" = " " ] && [ "$capacity" -le 25 ] && warn="❗"
 	if [[ $capacity -le 10 ]]; then
-			status=""
+			status=" "
 	elif [[ $capacity -le 25 ]]; then
-			status=""
+			status=" "
 	elif [[ $capacity -le 50 ]]; then
-			status=""
+			status=" "
 	elif [[ $capacity -le 75 ]]; then
-			status=""
+			status=" "
 	else
-			status=""
+			status=" "
 	fi
 	# Prints the info
-	printf " %s %s%d%% " "$status" "$warn" "$capacity"; unset warn
+	printf " %s%s%d%% " "$status" "$warn" "$capacity"; unset warn
 done && printf "\\n"

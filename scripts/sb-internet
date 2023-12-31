@@ -6,8 +6,8 @@ case $BLOCK_BUTTON in
 	1) "$TERMINAL" -e nmtui; pkill -RTMIN+1 dwmblocks ;;
 	3) notify-send "🌐 Internet module" "\- Click to connect
 ❌: wifi disabled or no wifi connection
- : wifi connection with quality
- : ethernet working
+🛜: wifi connection with quality
+🔗: ethernet working
 🔒: vpn is active
 " ;;
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
@@ -15,13 +15,13 @@ esac
 
 # Wifi
 if [ "$(cat /sys/class/net/w*/operstate 2>/dev/null)" = 'up' ] ; then
-	wifiicon="$(awk '/^\s*w/ { print " " , int($3 * 100 / 70) "% " }' /proc/net/wireless)"
+	wifiicon="$(awk '/^\s*w/ { print " 🛜" , int($3 * 100 / 70) "% " }' /proc/net/wireless)"
 elif [ "$(cat /sys/class/net/w*/operstate 2>/dev/null)" = 'down' ] ; then
-	[ "$(cat /sys/class/net/w*/flags 2>/dev/null)" = '0x1003' ] && wifiicon=" " || wifiicon="❌"
+	[ "$(cat /sys/class/net/w*/flags 2>/dev/null)" = '0x1003' ] && wifiicon="🛜" || wifiicon="❌"
 fi
 
 # Ethernet
-[ "$(cat /sys/class/net/e*/operstate 2>/dev/null)" = 'up' ] && ethericon=" "
+[ "$(cat /sys/class/net/e*/operstate 2>/dev/null)" = 'up' ] && ethericon="🔗"
 # [ "$(cat /sys/class/net/e*/operstate 2>/dev/null)" = 'up' ] && ethericon=" " || ethericon=" "
 
 # TUN
